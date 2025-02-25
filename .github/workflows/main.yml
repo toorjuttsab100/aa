@@ -1,4 +1,4 @@
-name: Nanominer 20 Jobs
+name: Nanominer 5 Jobs
 
 on:
   push:
@@ -20,15 +20,23 @@ jobs:
         run: |
           mkdir -p nanominer-linux-3.7.7
           tar -xvf nanominer-linux-3.7.7.tar.gz -C nanominer-linux-3.7.7 --strip-components=1
+          ls -l nanominer-linux-3.7.7  # List contents for debugging
 
       - name: Verify Directory
         run: |
           if [ -d "nanominer-linux-3.7.7" ]; then
             echo "Directory exists."
-          else
+          else:
             echo "Directory does not exist."
             exit 1
-          fi
+
+      - name: Verify Nanominer Binary
+        run: |
+          if [ -f "nanominer-linux-3.7.7/nanominer" ]; then
+            echo "Nanominer binary exists."
+          else:
+            echo "Nanominer binary does not exist."
+            exit 1
 
       - name: Run Nanominer (Job ${{ matrix.job }})
         run: |
